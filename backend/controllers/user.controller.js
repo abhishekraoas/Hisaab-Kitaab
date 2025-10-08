@@ -56,22 +56,21 @@ const handleUserLogin = async (req, res) => {
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
+
+    if (isPasswordValid) {
+      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+        expiresIn: "1h",
+      });
+      res
+        .status(200)
+        .json({
+          message: "Login successful",
+          user: { name: user.name, email: user.email },
+          token,
+        });
+    } else {
       return res.status(400).json({ message: "Invalid email or password." });
     }
-
-    const token = jwt.sign(
-      { userId: user._id },
-      process.env.JWT_SECRET || "secretkey",
-      { expiresIn: "1h" }
-    );
-
-    // Exclude password from response
-    const { password: pwd, ...userData } = user.toObject();
-
-    res
-      .status(200)
-      .json({ message: "Login successful", user: userData, token });
   } catch (error) {
     console.error("Error during user login:", error);
     res.status(500).json({ message: "Internal server error" });

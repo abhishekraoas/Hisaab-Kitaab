@@ -8,5 +8,4 @@ router.post('/signup', handleUserSignUp);
 //User Login Route
 router.post('/login', handleUserLogin);
 
-
 module.exports = router;
