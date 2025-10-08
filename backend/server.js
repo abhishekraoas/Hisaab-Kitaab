@@ -1,33 +1,41 @@
 const express = require("express");
 const cors = require("cors");
+const dotenv = require("dotenv");
 const connectToMongoDB = require("./config/dbConnection");
-require('dotenv').config()
-const app = express();
+const userRoutes = require("./routes/user.route");
 
-//Middleware
+dotenv.config(); // Load .env variables
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Middleware
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-const PORT = process.env.PORT || 3000
+// Routes
+app.use("/", userRoutes);
 
-//Checking the Server is running or not
-app.get('/', (req, res) => {
-  res.json({ message: 'Server is Running!!' })
-})
+// Test route
+app.get("/", (req, res) => {
+  res.json({ message: "🚀 Server is Running Successfully!" });
+});
 
-//Server Start
+// Start server with DB connection
 const startServer = async () => {
   try {
-    await connectToMongoDB(process.env.URL_DB)
-    app.listen(PORT, () => {
-      console.log(`App is listening on port ${PORT}`)
-    })
-  } catch (error) {
-    console.error('Failed to connect to MongoDB:', error.message)
-    process.exit(1) 
-  } 
-}
+    await connectToMongoDB(process.env.URL_DB);
 
-startServer()
+    app.listen(PORT, () => {
+      console.log(`✅ Server is running on Port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("❌ Failed to connect to MongoDB:", error.message);
+    process.exit(1);
+  }
+};
+
+startServer();
 
 module.exports = app;
