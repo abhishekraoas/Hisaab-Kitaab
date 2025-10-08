@@ -25,7 +25,7 @@ const startServer = async () => {
   } catch (error) {
     console.error('Failed to connect to MongoDB:', error.message)
     process.exit(1) 
-  }
+  } 
 }
 
 startServer()
