@@ -1,0 +1,31 @@
+{
+  "user": {
+    "name": "Satish Pandey",
+    "email": "satish@example.com",
+    "monthlyBudget": 50000
+  },
+  "stats": {
+    "income": 70000,
+    "expenses": 42000,
+    "savings": 28000
+  },
+  "expenses": [
+    { "id": 1, "description": "Groceries", "category": "Food", "amount": 5000, "date": "2025-10-01" },
+    { "id": 2, "description": "Movie Tickets", "category": "Entertainment", "amount": 1500, "date": "2025-10-03" },
+    { "id": 3, "description": "Electricity Bill", "category": "Bills", "amount": 2500, "date": "2025-10-05" }
+  ],
+  "incomeEntries": [
+    { "id": 1, "source": "Salary", "amount": 70000, "date": "2025-10-01" }
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "name": "Trip to Goa",
+      "members": ["Satish", "Rohit", "Anjali"],
+      "expenses": [
+        { "description": "Hotel", "amount": 12000, "paidBy": "Satish" },
+        { "description": "Food", "amount": 5000, "paidBy": "Rohit" }
+      ]
+    }
+  ]
+}
