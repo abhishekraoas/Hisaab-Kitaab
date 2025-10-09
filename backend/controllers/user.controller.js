@@ -6,24 +6,25 @@ require("dotenv").config();
 // Handle user sign-up
 const handleUserSignUp = async (req, res) => {
   const { name, email, password } = req.body;
-  if (!name || !email || !password) {
+  if (!name || !email || !password || !mobile) {
     return res
       .status(400)
-      .json({ message: "Name, email, and password are required." });
+      .json({ message: "Name, email, mobile, and password are required." });
   }
 
   try {
-    const existingUser = await userModel.findOne({ email });
+    const existingUser = await userModel.findOne({ email || mobile });
     if (existingUser) {
       return res
         .status(400)
-        .json({ message: "User with this email already exists." });
+        .json({ message: "User with this email or mobile already exists." });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new userModel({
       name,
       email,
+      mobile,
       password: hashedPassword,
     });
 
