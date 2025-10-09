@@ -1,0 +1,156 @@
+# ========== NODE / EXPRESS / SERVER ==========
+node_modules/
+dist/
+build/
+tmp/
+temp/
+logs/
+*.log
+*.gz
+*.zip
+*.bak
+*.pid
+*.seed
+*.pid.lock
+
+# Environment variables
+.env
+.env.*
+
+
+# ========== REACT / CLIENT ==========
+# CRA / Vite / Next.js / etc.
+build/
+.cache/
+.next/
+out/
+.parcel-cache/
+coverage/
+*.map
+
+# React snapshot tests
+**/__snapshots__/
+**/*.snap
+
+# React environment files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+
+# ========== TYPESCRIPT ==========
+*.tsbuildinfo
+*.d.ts
+*.d.ts.map
+
+
+# ========== MONOREPO SUPPORT (client/server) ==========
+client/node_modules/
+client/build/
+client/dist/
+client/.next/
+client/.cache/
+client/coverage/
+client/.parcel-cache/
+client/public/static/
+
+server/node_modules/
+server/build/
+server/dist/
+server/logs/
+server/coverage/
+
+# MongoDB local database files (optional)
+dump/
+data/
+*.mongodb
+
+# PM2 / process manager logs
+pids/
+*.pid
+*.pid.lock
+
+
+# ========== TESTING ==========
+coverage/
+.nyc_output/
+jest.config.js
+jest.config.ts
+jest-test-results.json
+
+
+# ========== LINTING / FORMATTING ==========
+.eslintcache
+.prettiercache
+
+
+# ========== OS / EDITORS ==========
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# VSCode
+.vscode/
+.history/
+
+# JetBrains (WebStorm, IntelliJ)
+.idea/
+*.iml
+
+# Sublime
+*.sublime-project
+*.sublime-workspace
+
+# Vim / Nano / Emacs
+*.swp
+*.swo
+*.tmp
+*~
+
+
+# ========== DOCKER / DEPLOYMENT (OPTIONAL) ==========
+.dockerignore
+docker-compose.override.yml
+docker-compose.debug.yml
+Dockerfile
+Dockerfile.dev
+*.tar
+
+# Ignore deploy folders if built separately
+deploy/
+*.tar.gz
+
+# ========== PACKAGE MANAGERS ==========
+# Yarn
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.yarnrc.yml
+
+# pnpm
+.pnpm-debug.log
+.pnpm-store/
+
+# npm
+package-lock.json
+npm-debug.log*
+
+
+# ========== MISC ==========
+*.tgz
+*.7z
+*.rar
+
+# Avoid accidentally committing sensitive backups or keys
+*.pem
+*.key
+*.crt
+*.pfx
+*.bak
+*.old
+*.orig
+*.rej
