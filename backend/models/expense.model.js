@@ -6,7 +6,7 @@ const expenseSchema = new mongoose.Schema(
     paidBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     amount: Number,
     description: String,
-    splitAmong: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    splitAmount: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     date: { type: Date, default: Date.now },
   },
   { timestamps: true }

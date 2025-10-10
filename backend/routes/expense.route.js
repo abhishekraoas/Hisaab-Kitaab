@@ -7,7 +7,7 @@ const router = express.Router();
 router.post("/create-expense", createExpense);
 
 // Get all expenses for a specific trip route
-router.get("/trip/:tripId", getExpenseById);
+router.get("/:id", getExpenseById);
 
 // Update an expense route
 router.put("/:id", updateExpense);

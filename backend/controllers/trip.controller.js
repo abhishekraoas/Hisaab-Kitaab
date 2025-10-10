@@ -74,5 +74,19 @@ const updateTrip = async (req, res) => {
   }
 };
 
+//delete a trip
+const deleteTrip = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedTrip = await tripModel.findByIdAndDelete(id);
+    if (!deletedTrip) {
+      return res.status(404).json({ message: "Trip not found" });
+    }
+    res.status(200).json({ message: "Trip deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting trip:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
-export { createTrip, getTrips, getTripById, updateTrip };
+export { createTrip, getTrips, getTripById, updateTrip, deleteTrip };

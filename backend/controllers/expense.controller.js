@@ -2,8 +2,8 @@ import expenseModel from "../models/expense.model.js";
 
 // Create a new expense
 const createExpense = async (req, res) => {
-  const { tripId, paidBy, amount, description, splitAmong, date } = req.body;
-  if (!tripId || !paidBy || !amount || !description || !splitAmong) {
+  const { tripId, paidBy, amount, description, splitAmount, date } = req.body;
+  if (!tripId || !paidBy || !amount || !description || !splitAmount) {
     return res.status(400).json({ message: "All fields are required." });
   }
   try {
@@ -12,7 +12,7 @@ const createExpense = async (req, res) => {
       paidBy,
       amount,
       description,
-      splitAmong,
+      splitAmount,
       date,
     });
     await newExpense.save();
@@ -32,7 +32,7 @@ const getExpenses = async (req, res) => {
       .find()
       .populate("tripId", "tripName")
       .populate("paidBy", "name email")
-      .populate("splitAmong", "name email");
+      .populate("splitAmount", "name email");
     res.status(200).json({ expenses });
   } catch (error) {
     console.error("Error fetching expenses:", error);
@@ -48,7 +48,7 @@ const getExpenseById = async (req, res) => {
       .findById(id)
       .populate("tripId", "tripName")
       .populate("paidBy", "name email")
-      .populate("splitAmong", "name email");
+      .populate("splitAmount", "name email");
     if (!expense) {
       return res.status(404).json({ message: "Expense not found" });
     }
@@ -62,11 +62,11 @@ const getExpenseById = async (req, res) => {
 //update an expense
 const updateExpense = async (req, res) => {
   const { id } = req.params;
-  const { tripId, paidBy, amount, description, splitAmong, date } = req.body;
+  const { tripId, paidBy, amount, description, splitAmount, date } = req.body;
   try {
     const updatedExpense = await expenseModel.findByIdAndUpdate(
       id,
-      { tripId, paidBy, amount, description, splitAmong, date },
+      { tripId, paidBy, amount, description, splitAmount, date },
       { new: true }
     );
     if (!updatedExpense) {
