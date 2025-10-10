@@ -1,5 +1,4 @@
-const expenseModel = require("../models/expense.model");
-
+import expenseModel from "../models/expense.model.js";
 
 // Create a new expense
 const createExpense = async (req, res) => {
@@ -98,10 +97,4 @@ const deleteExpense = async (req, res) => {
   }
 };
 
-module.exports = {
-  createExpense,
-  getExpenses,
-  getExpenseById,
-  updateExpense,
-  deleteExpense,
-};
+export { createExpense, getExpenses, getExpenseById, updateExpense, deleteExpense };

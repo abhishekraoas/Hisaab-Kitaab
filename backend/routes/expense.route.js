@@ -1,13 +1,13 @@
-const {createExpense, getExpensesByTripId, updateExpense, deleteExpense} = require("../controllers/expense.controller.js");
+import { createExpense, getExpenseById, updateExpense, deleteExpense } from "../controllers/expense.controller.js";
 
-const express = require("express");
+import express from "express";
 const router = express.Router();
 
 // Create a new expense route
 router.post("/create-expense", createExpense);
 
 // Get all expenses for a specific trip route
-router.get("/trip/:tripId", getExpensesByTripId);
+router.get("/trip/:tripId", getExpenseById);
 
 // Update an expense route
 router.put("/:id", updateExpense);
@@ -15,4 +15,4 @@ router.put("/:id", updateExpense);
 // Delete an expense route
 router.delete("/:id", deleteExpense);
 
-module.exports = router;
+export default router;

@@ -1,10 +1,11 @@
-const express = require("express");
-const cors = require("cors");
-const dotenv = require("dotenv");
-const connectToMongoDB = require("./config/dbConnection");
-const userRoutes = require("./routes/user.route.js");
-const tripRoutes = require("./routes/trip.route.js");
-const expenseRoutes = require("./routes/expense.route.js");
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import connectToMongoDB from "./config/dbConnection.js";
+import userRoutes from "./routes/user.route.js";
+import tripRoutes from "./routes/trip.route.js";
+import expenseRoutes from "./routes/expense.route.js";
+
 dotenv.config();
 
 const app = express();
@@ -41,4 +42,4 @@ const startServer = async () => {
 
 startServer();
 
-module.exports = app;
+export default app;

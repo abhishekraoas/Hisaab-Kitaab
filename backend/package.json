@@ -1,4 +1,9 @@
 {
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "type": "module",
+
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",

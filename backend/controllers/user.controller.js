@@ -1,7 +1,8 @@
-const userModel = require("../models/user.model");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-require("dotenv").config();
+import userModel from "../models/user.model.js";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 
 // Handle user sign-up
 const handleUserSignUp = async (req, res) => {
@@ -13,7 +14,7 @@ const handleUserSignUp = async (req, res) => {
   }
 
   try {
-    const existingUser = await userModel.findOne({ email || mobile });
+    const existingUser = await userModel.findOne({ $or: [{ email }, { mobile }] });
     if (existingUser) {
       return res
         .status(400)
@@ -76,4 +77,4 @@ const handleUserLogin = async (req, res) => {
   }
 };
 
-module.exports = { handleUserSignUp, handleUserLogin };
+export { handleUserSignUp, handleUserLogin };

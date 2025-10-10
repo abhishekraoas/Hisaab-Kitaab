@@ -1,4 +1,4 @@
-const tripModel = require("../models/trip.model");
+import tripModel from "../models/trip.model.js";
 
 // Create a new trip
 const createTrip = async (req, res) => {
@@ -74,9 +74,5 @@ const updateTrip = async (req, res) => {
   }
 };
 
-module.exports = {
-  createTrip,
-  getTrips,
-  getTripById,
-  updateTrip,
-};
+
+export { createTrip, getTrips, getTripById, updateTrip };
