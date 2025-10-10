@@ -2,9 +2,10 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const connectToMongoDB = require("./config/dbConnection");
-const userRoutes = require("./routes/user.route");
-
-dotenv.config(); // Load .env variables
+const userRoutes = require("./routes/user.route.js");
+const tripRoutes = require("./routes/trip.route.js");
+const expenseRoutes = require("./routes/expense.route.js");
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -15,7 +16,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use("/", userRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/trips", tripRoutes);
+app.use("/api/expenses", expenseRoutes);
 
 // Test route
 app.get("/", (req, res) => {
