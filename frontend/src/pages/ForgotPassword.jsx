@@ -46,7 +46,7 @@ export default function ForgotPassword() {
         </form>
 
         <div className="flex justify-between mt-4 text-sm">
-          <Link to="/" className="text-blue-500 hover:underline">
+          <Link to="/signin" className="text-blue-500 hover:underline">
             Back to Sign In
           </Link>
           <Link to="/signup" className="text-blue-500 hover:underline">
