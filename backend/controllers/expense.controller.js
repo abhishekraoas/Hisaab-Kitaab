@@ -25,23 +25,8 @@ const createExpense = async (req, res) => {
   }
 };
 
-// Get all expenses
-const getExpenses = async (req, res) => {
-  try {
-    const expenses = await expenseModel
-      .find()
-      .populate("tripId", "tripName")
-      .populate("paidBy", "name email")
-      .populate("splitAmount", "name email");
-    res.status(200).json({ expenses });
-  } catch (error) {
-    console.error("Error fetching expenses:", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-};
-
-// Get expense by ID
-const getExpenseById = async (req, res) => {
+// Get expenses by ID
+ const getExpenseById = async (req, res) => {
   const { id } = req.params;
   try {
     const expense = await expenseModel
@@ -55,6 +40,22 @@ const getExpenseById = async (req, res) => {
     res.status(200).json({ expense });
   } catch (error) {
     console.error("Error fetching expense:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// Get all expense by Trip ID
+const getAllExpenseByTripId = async (req, res) => {
+  const { tripId } = req.params;
+  try {
+    const expenses = await expenseModel
+      .find({ tripId })
+      .populate("tripId", "tripName")
+      .populate("paidBy", "name email")
+      .populate("splitAmount", "name email");
+    res.status(200).json({ expenses });
+  } catch (error) {
+    console.error("Error fetching expenses for trip:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -97,4 +98,34 @@ const deleteExpense = async (req, res) => {
   }
 };
 
-export { createExpense, getExpenses, getExpenseById, updateExpense, deleteExpense };
+//Split Expense Logic
+const splitExpense = async (req, res) => {
+  const { tripId, paidBy, amount, description, splitAmount, date } = req.body;
+  if (!tripId || !paidBy || !amount || !description || !splitAmount) {
+    return res.status(400).json({ message: "All fields are required." });
+  }
+  try {
+    const splitCount = splitAmount.length;
+    const individualShare = amount / splitCount;
+
+    const newExpense = new expenseModel({
+      tripId,
+      paidBy,
+      amount,
+      description,
+      splitAmount,
+      date,
+    });
+    await newExpense.save();
+    res.status(201).json({
+      message: "Expense created and split successfully",
+      expense: newExpense,
+      individualShare,
+    });
+  } catch (error) {
+    console.error("Error creating and splitting expense:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export { createExpense, getExpenseById, getAllExpenseByTripId, updateExpense, deleteExpense, splitExpense };
