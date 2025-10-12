@@ -68,10 +68,10 @@ export default function ResetPassword() {
         </form>
 
         <div className="flex justify-between mt-4 text-sm">
-          <Link to="/signin" className="text-blue-500 hover:underline">
+          <Link to="/users/signin" className="text-blue-500 hover:underline">
             Back to Sign In
           </Link>
-          <Link to="/signup" className="text-blue-500 hover:underline">
+          <Link to="/users/signup" className="text-blue-500 hover:underline">
             Create Account
           </Link>
         </div>

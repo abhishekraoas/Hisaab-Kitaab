@@ -15,12 +15,12 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Landing />} />
-        <Route path="/home" element={<MainLayout><Home /></MainLayout>} />
-        <Route path="/signin" element={<MainLayout><SignIn /></MainLayout>} />
-        <Route path="/signup" element={<MainLayout><SignUp /></MainLayout>} />
-        <Route path="/forgot-password" element={<MainLayout><ForgotPassword /></MainLayout>} />
-        <Route path="/reset-password/:token" element={<MainLayout><ResetPassword /></MainLayout>} />
-        <Route path="/profile" element={<MainLayout><Profile /></MainLayout>} />
+        <Route path="/expenses/home" element={<MainLayout><Home /></MainLayout>} />
+        <Route path="/users/signin" element={<MainLayout><SignIn /></MainLayout>} />
+        <Route path="/users/signup" element={<MainLayout><SignUp /></MainLayout>} />
+        <Route path="/users/forgot-password" element={<MainLayout><ForgotPassword /></MainLayout>} />
+        <Route path="/users/reset-password/:token" element={<MainLayout><ResetPassword /></MainLayout>} />
+        <Route path="/users/profile" element={<MainLayout><Profile /></MainLayout>} />
       </Routes>
     </Router>
   );

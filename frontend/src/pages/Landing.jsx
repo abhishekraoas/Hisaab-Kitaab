@@ -1,4 +1,3 @@
-// pages/LandingPage.jsx
 import React from "react";
 import { Link } from "react-router-dom";
 import { GiMoneyStack, GiPiggyBank, GiTeamIdea } from "react-icons/gi";
@@ -50,13 +49,13 @@ export default function LandingPage() {
       {/* Buttons */}
       <div className="flex gap-6 mb-12">
         <Link
-          to="/signin"
+          to="/users/signin"
           className="bg-blue-600 text-white px-8 py-3 rounded-xl font-semibold shadow-md hover:bg-blue-700 transition transform hover:scale-105"
         >
           Sign In
         </Link>
         <Link
-          to="/signup"
+          to="/users/signup"
           className="bg-green-600 text-white px-8 py-3 rounded-xl font-semibold shadow-md hover:bg-green-700 transition transform hover:scale-105"
         >
           Sign Up

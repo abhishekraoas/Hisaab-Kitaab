@@ -6,7 +6,7 @@ dotenv.config();
 
 // Handle user sign-up
 const handleUserSignUp = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, mobile, password } = req.body;
   if (!name || !email || !password || !mobile) {
     return res
       .status(400)
@@ -63,9 +63,10 @@ const handleUserLogin = async (req, res) => {
       const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
         expiresIn: "1h",
       });
+      // console.log("Generated JWT Token:", token); // Debugging line
       res.status(200).json({
         message: "Login successful",
-        user: { name: user.name, email: user.email },
+        user: { name: user.name, email: user.email, mobile: user.mobile },
         token,
       });
     } else {
