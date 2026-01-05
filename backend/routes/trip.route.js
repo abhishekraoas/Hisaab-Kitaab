@@ -1,21 +1,47 @@
-import { createTrip, getTrips, getTripById, updateTrip, deleteTrip } from "../controllers/trip.controller.js";
+import { 
+  createTrip, 
+  getTrips, 
+  getTripById, 
+  updateTrip, 
+  addMember, 
+  removeMember, 
+  deleteTrip,
+  generateInviteLink,
+  acceptInvite,
+} from "../controllers/trip.controller.js";
 import express from "express";
+import { isAuthenticated } from "../middleware/authMiddleware.js";
+
 const router = express.Router();
 
-//create a new trip route
+// All routes require authentication
+router.use(isAuthenticated);
+
+// Create a new trip/group
 router.post('/create-trip', createTrip);
 
-//get all trips route
+// Get all trips for logged-in user
 router.get('/', getTrips);
 
-//get trip by id route
+// Get trip by id
 router.get('/:id', getTripById);
 
-//update trip details route
+// Update trip details (creator only)
 router.put('/:id', updateTrip);
 
-//delete a trip route
-router.delete('/:id', deleteTrip);
+// Add member to trip (creator only)
+router.post('/:id/add-member', addMember);
 
+// Remove member from trip (creator only)
+router.delete('/:id/remove-member/:memberId', removeMember);
+
+// Generate invite link (creator only)
+router.post('/:id/generate-invite', generateInviteLink);
+
+// Accept invite and join group
+router.post('/accept-invite/:token', acceptInvite);
+
+// Delete a trip (creator only)
+router.delete('/:id', deleteTrip);
 
 export default router;
