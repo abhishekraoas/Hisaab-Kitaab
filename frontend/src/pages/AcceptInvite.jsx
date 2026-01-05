@@ -47,7 +47,13 @@ export default function AcceptInvite() {
             <div className="text-center">
               <div className="text-green-500 text-6xl mb-6">✓</div>
               <h2 className="text-2xl font-bold text-gray-800 mb-2">Success!</h2>
-              <p className="text-gray-600">You've been added to the group. Redirecting...</p>
+              <p className="text-gray-600 mb-6">You've been added to the group. Redirecting...</p>
+              <button
+                onClick={() => navigate('/home')}
+                className="px-6 py-3 rounded-xl bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition shadow-lg"
+              >
+                🏠 Go to Home
+              </button>
             </div>
           )}
 

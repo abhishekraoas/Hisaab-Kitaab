@@ -16,6 +16,8 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { FaDownload, FaArrowLeft, FaCalendar } from "react-icons/fa";
+import { SkeletonChart, SkeletonStats } from '../components/SkeletonLoader';
+import PullToRefresh from '../components/PullToRefresh';
 
 const Reports = () => {
   const navigate = useNavigate();
@@ -27,14 +29,14 @@ const Reports = () => {
   const [yearlySummary, setYearlySummary] = useState(null);
 
   const COLORS = [
+    "#16476A", // Medium Blue
+    "#3B9797", // Teal
+    "#FDB5CE", // Pink
+    "#132440", // Dark Navy
     "#4F46E5", // indigo
     "#7C3AED", // purple
-    "#EC4899", // pink
-    "#F59E0B", // amber
     "#10B981", // green
-    "#3B82F6", // blue
-    "#EF4444", // red
-    "#8B5CF6", // violet
+    "#F59E0B", // amber
   ];
 
   const months = [
@@ -82,6 +84,10 @@ const Reports = () => {
       console.error("Error fetching reports:", err);
       setLoading(false);
     }
+  };
+
+  const handleRefresh = async () => {
+    await fetchReports();
   };
 
   const handleExport = async () => {
@@ -139,61 +145,51 @@ const Reports = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-        <div className="text-center">
-          <div className="inline-block p-4 bg-indigo-100 rounded-full mb-4">
-            <svg
-              className="animate-spin h-8 w-8 text-indigo-600"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              ></circle>
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              ></path>
-            </svg>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded w-1/4 mb-8 animate-pulse"></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <SkeletonStats />
+            <SkeletonStats />
+            <SkeletonStats />
+            <SkeletonStats />
           </div>
-          <p className="text-gray-600">Loading reports...</p>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <SkeletonChart />
+            <SkeletonChart />
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 py-8 px-4">
-      <div className="max-w-7xl mx-auto">
+    <PullToRefresh onRefresh={handleRefresh}>
+      <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-8 px-4 transition-colors duration-200">
+        <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <button
             onClick={() => navigate("/home")}
-            className="flex items-center gap-2 text-gray-700 mb-4 hover:text-gray-900 transition font-semibold"
+            className="flex items-center gap-2 text-gray-700 dark:text-gray-300 mb-4 hover:text-gray-900 dark:hover:text-white transition font-semibold"
           >
             <FaArrowLeft /> Back to Home
           </button>
 
           <div className="flex justify-between items-center">
-            <h1 className="text-4xl font-bold text-gray-800">
+            <h1 className="text-4xl font-bold text-gray-800 dark:text-white">
               Reports & Analytics
             </h1>
             <div className="flex gap-3">
               <button
                 onClick={handleExportPDF}
-                className="flex items-center gap-2 bg-purple-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-purple-700 transition shadow-lg"
+                className="flex items-center gap-2 bg-purple-600 dark:bg-purple-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-purple-700 dark:hover:bg-purple-600 transition shadow-lg"
               >
                 <FaDownload /> Export PDF
               </button>
               <button
                 onClick={handleExport}
-                className="flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition shadow-lg"
+                className="flex items-center gap-2 bg-indigo-600 dark:bg-indigo-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-indigo-700 dark:hover:bg-indigo-600 transition shadow-lg"
               >
                 <FaDownload /> Export CSV
               </button>
@@ -207,8 +203,8 @@ const Reports = () => {
             onClick={() => setActiveTab("monthly")}
             className={`px-6 py-3 rounded-xl font-semibold transition ${
               activeTab === "monthly"
-                ? "bg-indigo-600 text-white shadow-lg"
-                : "bg-white text-gray-700 border border-gray-200 hover:bg-gray-50"
+                ? "bg-indigo-600 dark:bg-indigo-500 text-white shadow-lg"
+                : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
             }`}
           >
             Monthly Report
@@ -217,8 +213,8 @@ const Reports = () => {
             onClick={() => setActiveTab("yearly")}
             className={`px-6 py-3 rounded-xl font-semibold transition ${
               activeTab === "yearly"
-                ? "bg-indigo-600 text-white shadow-lg"
-                : "bg-white text-gray-700 border border-gray-200 hover:bg-gray-50"
+                ? "bg-indigo-600 dark:bg-indigo-500 text-white shadow-lg"
+                : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
             }`}
           >
             Yearly Report
@@ -226,15 +222,15 @@ const Reports = () => {
         </div>
 
         {/* Date Selector */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-6 border border-gray-100">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-6 border border-gray-100 dark:border-gray-700">
           <div className="flex items-center gap-4">
-            <FaCalendar className="text-indigo-600 text-xl" />
+            <FaCalendar className="text-indigo-600 dark:text-indigo-400 text-xl" />
             <div className="flex gap-4">
               {activeTab === "monthly" && (
                 <select
                   value={selectedMonth}
                   onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
-                  className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400"
                 >
                   {months.map((month, index) => (
                     <option key={index} value={index + 1}>
@@ -246,7 +242,7 @@ const Reports = () => {
               <select
                 value={selectedYear}
                 onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-                className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400"
               >
                 {[2024, 2025, 2026].map((year) => (
                   <option key={year} value={year}>
@@ -263,31 +259,31 @@ const Reports = () => {
           <>
             {/* Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-                <h3 className="text-gray-600 text-sm font-semibold mb-2">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
+                <h3 className="text-gray-600 dark:text-gray-400 text-sm font-semibold mb-2">
                   Total Spent
                 </h3>
-                <p className="text-3xl font-bold text-gray-800">
+                <p className="text-3xl font-bold text-gray-800 dark:text-white">
                   ₹{monthlySummary.totalSpent}
                 </p>
-                <p className="text-gray-500 text-sm mt-1">
+                <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
                   {monthlySummary.period.monthName} {monthlySummary.period.year}
                 </p>
               </div>
-              <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-                <h3 className="text-gray-600 text-sm font-semibold mb-2">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
+                <h3 className="text-gray-600 dark:text-gray-400 text-sm font-semibold mb-2">
                   Total Expenses
                 </h3>
-                <p className="text-3xl font-bold text-gray-800">
+                <p className="text-3xl font-bold text-gray-800 dark:text-white">
                   {monthlySummary.expenseCount}
                 </p>
-                <p className="text-gray-500 text-sm mt-1">Transactions</p>
+                <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">Transactions</p>
               </div>
-              <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-                <h3 className="text-gray-600 text-sm font-semibold mb-2">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
+                <h3 className="text-gray-600 dark:text-gray-400 text-sm font-semibold mb-2">
                   Average per Expense
                 </h3>
-                <p className="text-3xl font-bold text-gray-800">
+                <p className="text-3xl font-bold text-gray-800 dark:text-white">
                   ₹
                   {monthlySummary.expenseCount > 0
                     ? (
@@ -295,15 +291,15 @@ const Reports = () => {
                       ).toFixed(2)
                     : 0}
                 </p>
-                <p className="text-gray-500 text-sm mt-1">Per transaction</p>
+                <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">Per transaction</p>
               </div>
             </div>
 
             {/* Charts */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Category Breakdown Pie Chart */}
-              <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-                <h3 className="text-xl font-bold text-gray-800 mb-4">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
+                <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-4">
                   Spending by Category
                 </h3>
                 {monthlySummary.categoryBreakdown.length > 0 ? (
@@ -339,8 +335,8 @@ const Reports = () => {
               </div>
 
               {/* Group Breakdown */}
-              <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-                <h3 className="text-xl font-bold text-gray-800 mb-4">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
+                <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-4">
                   Spending by Group
                 </h3>
                 {monthlySummary.groupBreakdown.length > 0 ? (
@@ -354,7 +350,7 @@ const Reports = () => {
                     </BarChart>
                   </ResponsiveContainer>
                 ) : (
-                  <p className="text-center text-gray-500 py-12">
+                  <p className="text-center text-gray-500 dark:text-gray-400 py-12">
                     No expenses in this period
                   </p>
                 )}
@@ -368,42 +364,42 @@ const Reports = () => {
           <>
             {/* Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-                <h3 className="text-gray-600 text-sm font-semibold mb-2">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
+                <h3 className="text-gray-600 dark:text-gray-400 text-sm font-semibold mb-2">
                   Total Spent
                 </h3>
-                <p className="text-3xl font-bold text-gray-800">
+                <p className="text-3xl font-bold text-gray-800 dark:text-white">
                   ₹{yearlySummary.totalSpent}
                 </p>
-                <p className="text-gray-500 text-sm mt-1">
+                <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
                   Year {yearlySummary.year}
                 </p>
               </div>
-              <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-                <h3 className="text-gray-600 text-sm font-semibold mb-2">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
+                <h3 className="text-gray-600 dark:text-gray-400 text-sm font-semibold mb-2">
                   Total Expenses
                 </h3>
-                <p className="text-3xl font-bold text-gray-800">
+                <p className="text-3xl font-bold text-gray-800 dark:text-white">
                   {yearlySummary.expenseCount}
                 </p>
-                <p className="text-gray-500 text-sm mt-1">Transactions</p>
+                <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">Transactions</p>
               </div>
-              <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-                <h3 className="text-gray-600 text-sm font-semibold mb-2">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
+                <h3 className="text-gray-600 dark:text-gray-400 text-sm font-semibold mb-2">
                   Monthly Average
                 </h3>
-                <p className="text-3xl font-bold text-gray-800">
+                <p className="text-3xl font-bold text-gray-800 dark:text-white">
                   ₹{(yearlySummary.totalSpent / 12).toFixed(2)}
                 </p>
-                <p className="text-gray-500 text-sm mt-1">Per month</p>
+                <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">Per month</p>
               </div>
             </div>
 
             {/* Charts */}
             <div className="grid grid-cols-1 gap-6">
               {/* Monthly Trend Bar Chart */}
-              <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-                <h3 className="text-xl font-bold text-gray-800 mb-4">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
+                <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-4">
                   Monthly Spending Trend
                 </h3>
                 {yearlySummary.monthlyBreakdown.length > 0 ? (
@@ -414,19 +410,19 @@ const Reports = () => {
                       <YAxis />
                       <Tooltip formatter={(value) => `₹${value}`} />
                       <Legend />
-                      <Bar dataKey="amount" fill="#4F46E5" name="Amount Spent" />
+                      <Bar dataKey="amount" fill="#16476A" name="Amount Spent" />
                     </BarChart>
                   </ResponsiveContainer>
                 ) : (
-                  <p className="text-center text-gray-500 py-12">
+                  <p className="text-center text-gray-500 dark:text-gray-400 py-12">
                     No expenses in this year
                   </p>
                 )}
               </div>
 
               {/* Category Breakdown Pie Chart */}
-              <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-                <h3 className="text-xl font-bold text-gray-800 mb-4">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
+                <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-4">
                   Yearly Category Breakdown
                 </h3>
                 {yearlySummary.categoryBreakdown.length > 0 ? (
@@ -455,7 +451,7 @@ const Reports = () => {
                     </PieChart>
                   </ResponsiveContainer>
                 ) : (
-                  <p className="text-center text-gray-500 py-12">
+                  <p className="text-center text-gray-500 dark:text-gray-400 py-12">
                     No expenses in this year
                   </p>
                 )}
@@ -464,7 +460,8 @@ const Reports = () => {
           </>
         )}
       </div>
-    </div>
+      </div>
+    </PullToRefresh>
   );
 };
 

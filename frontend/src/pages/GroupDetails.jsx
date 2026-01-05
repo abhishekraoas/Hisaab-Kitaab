@@ -14,6 +14,8 @@ import {
   FaLink,
   FaCopy,
 } from 'react-icons/fa';
+import PullToRefresh from '../components/PullToRefresh';
+import EmptyState from '../components/EmptyState';
 
 const GroupDetails = () => {
   const { id } = useParams();
@@ -95,6 +97,14 @@ const GroupDetails = () => {
     } catch (err) {
       console.error('Error fetching settlements:', err);
     }
+  };
+
+  const handleRefresh = async () => {
+    await Promise.all([
+      fetchGroupDetails(),
+      fetchExpenses(),
+      fetchSettlements()
+    ]);
   };
 
   const handleAddExpense = async (e) => {
@@ -242,15 +252,15 @@ const GroupDetails = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
         <div className="text-center">
-          <div className="inline-block p-4 bg-indigo-100 rounded-full mb-4">
-            <svg className="animate-spin h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24">
+          <div className="inline-block p-4 bg-indigo-100 dark:bg-indigo-900/30 rounded-full mb-4">
+            <svg className="animate-spin h-8 w-8 text-indigo-600 dark:text-indigo-400" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
           </div>
-          <p className="text-gray-600">Loading group...</p>
+          <p className="text-gray-600 dark:text-gray-400">Loading group...</p>
         </div>
       </div>
     );
@@ -258,8 +268,8 @@ const GroupDetails = () => {
 
   if (!group) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-        <div className="text-gray-600 text-xl">Group not found</div>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+        <div className="text-gray-600 dark:text-gray-400 text-xl">Group not found</div>
       </div>
     );
   }
@@ -267,27 +277,37 @@ const GroupDetails = () => {
   const isCreator = group && currentUserId && group.createdBy._id === currentUserId;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 py-8 px-4">
-      <div className="max-w-6xl mx-auto">
+    <PullToRefresh onRefresh={handleRefresh}>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4 transition-colors duration-200">
+        <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <button
-            onClick={() => navigate('/groups')}
-            className="flex items-center gap-2 text-gray-700 mb-4 hover:text-gray-900 transition font-semibold"
-          >
-            <FaArrowLeft /> Back to Groups
-          </button>
+          <div className="flex items-center gap-4 mb-4">
+            <button
+              onClick={() => navigate('/groups')}
+              className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition font-semibold"
+            >
+              <FaArrowLeft /> Back to Groups
+            </button>
+            <span className="text-gray-300 dark:text-gray-600">|</span>
+            <button
+              onClick={() => navigate('/home')}
+              className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition font-semibold"
+            >
+              🏠 Home
+            </button>
+          </div>
 
-          <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-100 dark:border-gray-700">
             <div className="flex justify-between items-start">
               <div>
-                <h1 className="text-3xl font-bold text-gray-800 mb-2">
+                <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">
                   {group.tripName}
                 </h1>
                 {group.description && (
-                  <p className="text-gray-600">{group.description}</p>
+                  <p className="text-gray-600 dark:text-gray-400">{group.description}</p>
                 )}
-                <p className="text-gray-400 text-sm mt-2">
+                <p className="text-gray-400 dark:text-gray-500 text-sm mt-2">
                   Created by {group.createdBy.name}
                 </p>
               </div>
@@ -321,22 +341,22 @@ const GroupDetails = () => {
 
             {/* Stats */}
             <div className="grid grid-cols-3 gap-4 mt-6">
-              <div className="bg-indigo-50 rounded-xl p-4 text-center border border-indigo-100">
-                <FaUsers className="text-3xl text-indigo-600 mx-auto mb-2" />
-                <p className="text-gray-600 text-sm">Members</p>
-                <p className="text-gray-800 text-2xl font-bold">
+              <div className="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-4 text-center border border-indigo-100 dark:border-indigo-800">
+                <FaUsers className="text-3xl text-indigo-600 dark:text-indigo-400 mx-auto mb-2" />
+                <p className="text-gray-600 dark:text-gray-400 text-sm">Members</p>
+                <p className="text-gray-800 dark:text-white text-2xl font-bold">
                   {group.members.length}
                 </p>
               </div>
-              <div className="bg-purple-50 rounded-xl p-4 text-center border border-purple-100">
-                <FaReceipt className="text-3xl text-purple-600 mx-auto mb-2" />
-                <p className="text-gray-600 text-sm">Expenses</p>
-                <p className="text-gray-800 text-2xl font-bold">{expenses.length}</p>
+              <div className="bg-purple-50 dark:bg-purple-900/20 rounded-xl p-4 text-center border border-purple-100 dark:border-purple-800">
+                <FaReceipt className="text-3xl text-purple-600 dark:text-purple-400 mx-auto mb-2" />
+                <p className="text-gray-600 dark:text-gray-400 text-sm">Expenses</p>
+                <p className="text-gray-800 dark:text-white text-2xl font-bold">{expenses.length}</p>
               </div>
-              <div className="bg-green-50 rounded-xl p-4 text-center border border-green-100">
-                <FaChartLine className="text-3xl text-green-600 mx-auto mb-2" />
-                <p className="text-gray-600 text-sm">Total</p>
-                <p className="text-gray-800 text-2xl font-bold">
+              <div className="bg-green-50 dark:bg-green-900/20 rounded-xl p-4 text-center border border-green-100 dark:border-green-800">
+                <FaChartLine className="text-3xl text-green-600 dark:text-green-400 mx-auto mb-2" />
+                <p className="text-gray-600 dark:text-gray-400 text-sm">Total</p>
+                <p className="text-gray-800 dark:text-white text-2xl font-bold">
                   ₹{settlements?.totalExpense || 0}
                 </p>
               </div>
@@ -350,8 +370,8 @@ const GroupDetails = () => {
             onClick={() => setActiveTab('expenses')}
             className={`px-6 py-3 rounded-xl font-semibold transition ${
               activeTab === 'expenses'
-                ? 'bg-indigo-600 text-white shadow-lg'
-                : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'
+                ? 'bg-indigo-600 dark:bg-indigo-500 text-white shadow-lg'
+                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
             }`}
           >
             Expenses
@@ -360,8 +380,8 @@ const GroupDetails = () => {
             onClick={() => setActiveTab('settlements')}
             className={`px-6 py-3 rounded-xl font-semibold transition ${
               activeTab === 'settlements'
-                ? 'bg-indigo-600 text-white shadow-lg'
-                : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'
+                ? 'bg-indigo-600 dark:bg-indigo-500 text-white shadow-lg'
+                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
             }`}
           >
             Settlements
@@ -370,8 +390,8 @@ const GroupDetails = () => {
             onClick={() => setActiveTab('members')}
             className={`px-6 py-3 rounded-xl font-semibold transition ${
               activeTab === 'members'
-                ? 'bg-indigo-600 text-white shadow-lg'
-                : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'
+                ? 'bg-indigo-600 dark:bg-indigo-500 text-white shadow-lg'
+                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
             }`}
           >
             Members
@@ -382,31 +402,35 @@ const GroupDetails = () => {
         {activeTab === 'expenses' && (
           <div>
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-gray-800">Expenses</h2>
+              <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Expenses</h2>
               <button
                 onClick={() => setShowAddExpense(true)}
-                className="flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition shadow-lg"
+                className="flex items-center gap-2 bg-indigo-600 dark:bg-indigo-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-indigo-700 dark:hover:bg-indigo-600 transition shadow-lg"
               >
                 <FaPlus /> Add Expense
               </button>
             </div>
 
             {expenses.length === 0 ? (
-              <div className="bg-white rounded-2xl shadow-lg p-12 text-center border border-gray-100">
-                <FaReceipt className="text-6xl text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-600 text-xl">No expenses yet</p>
-              </div>
+              <EmptyState
+                illustration="expenses"
+                icon={FaReceipt}
+                title="No Expenses Yet"
+                message="Start tracking expenses by adding your first transaction. Split bills easily with your group members."
+                actionLabel="Add First Expense"
+                onAction={() => setShowAddExpense(true)}
+              />
             ) : (
               <div className="space-y-4">
                 {expenses.map((expense) => (
                   <div
                     key={expense._id}
-                    className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition border border-gray-100"
+                    className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 hover:shadow-xl transition border border-gray-100 dark:border-gray-700"
                   >
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
-                          <h3 className="text-lg font-bold text-gray-800">
+                          <h3 className="text-lg font-bold text-gray-800 dark:text-white">
                             {expense.description}
                           </h3>
                           <span
@@ -417,16 +441,16 @@ const GroupDetails = () => {
                             {expense.category}
                           </span>
                         </div>
-                        <p className="text-gray-500 text-sm mb-2">
+                        <p className="text-gray-500 dark:text-gray-400 text-sm mb-2">
                           Paid by {expense.paidBy.name} on{' '}
                           {new Date(expense.createdAt).toLocaleDateString()}
                         </p>
-                        <p className="text-gray-600 text-sm">
+                        <p className="text-gray-600 dark:text-gray-400 text-sm">
                           Split: {expense.splitType}
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className="text-2xl font-bold text-gray-800">
+                        <p className="text-2xl font-bold text-gray-800 dark:text-white">
                           ₹{expense.amount}
                         </p>
                         {expense.paidBy._id === currentUser._id && (
@@ -791,7 +815,8 @@ const GroupDetails = () => {
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </PullToRefresh>
   );
 };
 

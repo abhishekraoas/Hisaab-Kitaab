@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import API from "../utils/api";
 
 export default function SignUp() {
@@ -13,6 +14,7 @@ export default function SignUp() {
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -100,23 +102,42 @@ export default function SignUp() {
                   ? "Mobile Number"
                   : field.charAt(0).toUpperCase() + field.slice(1)}
               </label>
-              <input
-                type={
-                  field === "password"
-                    ? "password"
-                    : field === "email"
-                    ? "email"
-                    : "text"
-                }
-                id={field}
-                placeholder={`Enter your ${
-                  field === "mobile" ? "mobile number" : field
-                }`}
-                value={formData[field]}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-              />
+              {field === "password" ? (
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    id={field}
+                    placeholder={`Enter your ${field}`}
+                    value={formData[field]}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                  >
+                    {showPassword ? <FaEyeSlash className="w-5 h-5" /> : <FaEye className="w-5 h-5" />}
+                  </button>
+                </div>
+              ) : (
+                <input
+                  type={
+                    field === "email"
+                      ? "email"
+                      : "text"
+                  }
+                  id={field}
+                  placeholder={`Enter your ${
+                    field === "mobile" ? "mobile number" : field
+                  }`}
+                  value={formData[field]}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                />
+              )}
             </div>
           ))}
 

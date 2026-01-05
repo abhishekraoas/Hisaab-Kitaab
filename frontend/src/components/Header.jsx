@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import API from "../utils/api";
+import QuickSearch from "./QuickSearch";
+import ThemeToggle from "./ThemeToggle";
 
 export default function Header() {
   const [user, setUser] = useState(null);
@@ -74,7 +76,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg sticky top-0 z-50">
+      <header className="bg-gradient-to-r from-blue-600 to-indigo-700 dark:from-gray-800 dark:to-gray-900 text-white shadow-lg sticky top-0 z-50 transition-colors duration-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
@@ -87,13 +89,20 @@ export default function Header() {
             </Link>
 
             {/* Navigation */}
-            <nav className="flex items-center space-x-4">
+            <nav className="flex items-center space-x-2 sm:space-x-4">
               {user ? (
-                <div className="relative" ref={dropdownRef}>
+                <>
+                  {/* Theme Toggle */}
+                  <ThemeToggle />
+                  
+                  {/* Quick Search */}
+                  <QuickSearch />
+                  
+                  <div className="relative" ref={dropdownRef}>
                   {/* Profile Button */}
                   <button
                     onClick={() => setShowDropdown(!showDropdown)}
-                    className="flex items-center space-x-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30"
+                    className="flex items-center space-x-2 sm:space-x-3 sm:bg-white/10 hover:bg-white/20 backdrop-blur-sm sm:px-4 sm:py-2 rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30"
                   >
                     <span className="hidden sm:block text-sm font-semibold text-white">
                       {user.name.split(" ")[0]}
@@ -109,29 +118,29 @@ export default function Header() {
 
                   {/* Dropdown Menu */}
                   {showDropdown && (
-                    <div className="absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100 animate-slideDown">
+                    <div className="absolute right-0 mt-3 w-80 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden border border-gray-100 dark:border-gray-700 animate-slideDown">
                       {/* Profile Header */}
-                      <div className="bg-gradient-to-br from-indigo-50 to-purple-50 p-6 border-b border-gray-100">
+                      <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-gray-700 dark:to-gray-800 p-6 border-b border-gray-100 dark:border-gray-700">
                         <div className="flex flex-col items-center">
                           <div
                             className={`w-20 h-20 rounded-full bg-gradient-to-br ${getRandomGradient(
                               user.name
-                            )} flex items-center justify-center text-white font-bold text-2xl shadow-lg ring-4 ring-white mb-3`}
+                            )} flex items-center justify-center text-white font-bold text-2xl shadow-lg ring-4 ring-white dark:ring-gray-600 mb-3`}
                           >
                             {getInitials(user.name)}
                           </div>
-                          <h3 className="font-bold text-lg text-gray-800">
+                          <h3 className="font-bold text-lg text-gray-800 dark:text-white">
                             {user.name}
                           </h3>
-                          <p className="text-sm text-gray-500">{user.email}</p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">{user.email}</p>
                         </div>
                       </div>
 
                       {/* User Details */}
-                      <div className="p-4 bg-white">
+                      <div className="p-4 bg-white dark:bg-gray-800">
                         <div className="space-y-3">
-                          <div className="flex items-center justify-between py-2 px-3 bg-gray-50 rounded-lg">
-                            <span className="text-sm text-gray-600 flex items-center">
+                          <div className="flex items-center justify-between py-2 px-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                            <span className="text-sm text-gray-600 dark:text-gray-300 flex items-center">
                               <svg
                                 className="w-4 h-4 mr-2"
                                 fill="none"
@@ -147,14 +156,14 @@ export default function Header() {
                               </svg>
                               Mobile
                             </span>
-                            <span className="text-sm font-medium text-gray-800">
+                            <span className="text-sm font-medium text-gray-800 dark:text-gray-200">
                               {user.mobile}
                             </span>
                           </div>
 
                           {user.income > 0 && (
-                            <div className="flex items-center justify-between py-2 px-3 bg-green-50 rounded-lg">
-                              <span className="text-sm text-green-700 flex items-center">
+                            <div className="flex items-center justify-between py-2 px-3 bg-green-50 dark:bg-green-900/30 rounded-lg">
+                              <span className="text-sm text-green-700 dark:text-green-400 flex items-center">
                                 <svg
                                   className="w-4 h-4 mr-2"
                                   fill="none"
@@ -170,15 +179,15 @@ export default function Header() {
                                 </svg>
                                 Income
                               </span>
-                              <span className="text-sm font-medium text-green-700">
+                              <span className="text-sm font-medium text-green-700 dark:text-green-400">
                                 ₹{user.income?.toLocaleString()}
                               </span>
                             </div>
                           )}
 
                           {user.monthlyBudget > 0 && (
-                            <div className="flex items-center justify-between py-2 px-3 bg-blue-50 rounded-lg">
-                              <span className="text-sm text-blue-700 flex items-center">
+                            <div className="flex items-center justify-between py-2 px-3 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
+                              <span className="text-sm text-blue-700 dark:text-blue-400 flex items-center">
                                 <svg
                                   className="w-4 h-4 mr-2"
                                   fill="none"
@@ -194,7 +203,7 @@ export default function Header() {
                                 </svg>
                                 Budget
                               </span>
-                              <span className="text-sm font-medium text-blue-700">
+                              <span className="text-sm font-medium text-blue-700 dark:text-blue-400">
                                 ₹{user.monthlyBudget?.toLocaleString()}
                               </span>
                             </div>
@@ -203,13 +212,13 @@ export default function Header() {
                       </div>
 
                       {/* Action Buttons */}
-                      <div className="p-4 bg-gray-50 space-y-2">
+                      <div className="p-4 bg-gray-50 dark:bg-gray-900 space-y-2">
                         <button
                           onClick={() => {
                             navigate("/profile");
                             setShowDropdown(false);
                           }}
-                          className="w-full flex items-center justify-center space-x-2 bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
+                          className="w-full flex items-center justify-center space-x-2 bg-indigo-600 dark:bg-indigo-500 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-colors"
                         >
                           <svg
                             className="w-5 h-5"
@@ -229,7 +238,7 @@ export default function Header() {
 
                         <button
                           onClick={handleLogout}
-                          className="w-full flex items-center justify-center space-x-2 bg-gray-200 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors"
+                          className="w-full flex items-center justify-center space-x-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 py-3 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
                         >
                           <svg
                             className="w-5 h-5"
@@ -252,7 +261,7 @@ export default function Header() {
                             setShowDropdown(false);
                             setShowDeleteModal(true);
                           }}
-                          className="w-full flex items-center justify-center space-x-2 bg-red-50 text-red-600 py-3 rounded-lg font-semibold hover:bg-red-100 transition-colors"
+                          className="w-full flex items-center justify-center space-x-2 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 py-3 rounded-lg font-semibold hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors"
                         >
                           <svg
                             className="w-5 h-5"
@@ -273,6 +282,7 @@ export default function Header() {
                     </div>
                   )}
                 </div>
+                </>
               ) : (
                 <>
                   <Link
@@ -297,11 +307,11 @@ export default function Header() {
       {/* Delete Account Modal */}
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4">
-          <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-md w-full shadow-2xl">
             <div className="text-center mb-6">
-              <div className="inline-block p-3 bg-red-100 rounded-full mb-4">
+              <div className="inline-block p-3 bg-red-100 dark:bg-red-900/30 rounded-full mb-4">
                 <svg
-                  className="w-12 h-12 text-red-600"
+                  className="w-12 h-12 text-red-600 dark:text-red-400"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -314,10 +324,10 @@ export default function Header() {
                   />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-gray-800 mb-2">
+              <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-2">
                 Delete Account
               </h3>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-300">
                 Are you sure you want to delete your account? This action cannot
                 be undone. All your data will be permanently deleted.
               </p>
@@ -332,7 +342,7 @@ export default function Header() {
               </button>
               <button
                 onClick={() => setShowDeleteModal(false)}
-                className="flex-1 border-2 border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
+                className="flex-1 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 py-3 rounded-lg font-semibold hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
                 Cancel
               </button>

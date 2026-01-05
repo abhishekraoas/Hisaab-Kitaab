@@ -129,6 +129,15 @@ export default function VerifyOTP() {
             </button>
           </p>
         </div>
+
+        <div className="mt-4 text-center">
+          <button
+            onClick={() => navigate('/home')}
+            className="text-gray-600 text-sm hover:text-indigo-600 transition"
+          >
+            🏠 Back to Home
+          </button>
+        </div>
       </div>
     </div>
   );
